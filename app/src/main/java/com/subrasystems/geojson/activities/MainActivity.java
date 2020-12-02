@@ -75,7 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             }
 
                             Division model = mDivisionMap.get(name);
-                            if (model != null) {
+                            if (model != null && mMap != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(model.getLat()), Double.parseDouble(model.getLng())), 10F));
                                 Utility.getInstance().dismissProgressDialog(mProgress);
                             }
