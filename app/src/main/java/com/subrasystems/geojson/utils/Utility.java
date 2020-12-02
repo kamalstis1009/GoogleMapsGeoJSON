@@ -1,5 +1,7 @@
 package com.subrasystems.geojson.utils;
 
+import android.app.Activity;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.Resources;
 
@@ -19,7 +21,6 @@ public class Utility {
         return mUtility;
     }
 
-    //Pass a JSON style object to your map
     public void mapsStyle(Context context, GoogleMap googleMap, int res) {
         try {
             boolean success = googleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(context, res));
@@ -30,4 +31,19 @@ public class Utility {
             e.printStackTrace();
         }
     }
+
+    public ProgressDialog showProgressDialog(Activity activity, final String message, boolean isCancelable) {
+        ProgressDialog mProgress = new ProgressDialog(activity, ProgressDialog.THEME_DEVICE_DEFAULT_DARK);
+        mProgress.setCancelable(isCancelable); //setCancelable(false); = invisible clicking the outside
+        mProgress.setMessage(message);
+        mProgress.show();
+        return mProgress;
+    }
+
+    public void dismissProgressDialog(ProgressDialog mProgress) {
+        if (mProgress != null && mProgress.isShowing()) {
+            mProgress.dismiss();
+        }
+    }
+
 }

@@ -2,6 +2,7 @@ package com.subrasystems.geojson.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
@@ -37,6 +38,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
+    private ProgressDialog mProgress;
     private GoogleMap mMap;
     private HashMap<String, Division> mDivisionMap = new LinkedHashMap<>();
 
@@ -63,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     SearchableSpinnerDialog.getInstance(MainActivity.this).getAlertDialog(new SearchableSpinnerDialog.CallBackPosition() {
                         @Override
                         public void onPositionItem(int position, String name) {
+                            mProgress = Utility.getInstance().showProgressDialog(MainActivity.this, "Please wait…", true);
                             ((TextView) findViewById(R.id.items)).setText(name);
                             ArrayList<JSONArray> jsonArrays = geometries.get(name);
                             for (JSONArray array : jsonArrays) {
@@ -72,6 +75,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             Division model = mDivisionMap.get(name);
                             if (model != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(model.getLat()), Double.parseDouble(model.getLng())), 11F));
+                                Utility.getInstance().dismissProgressDialog(mProgress);
                             }
                         }
                     }, divisions, true);
