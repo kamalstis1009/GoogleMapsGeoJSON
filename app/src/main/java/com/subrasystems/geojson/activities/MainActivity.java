@@ -105,6 +105,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //===============================================| Temporary Data
     private JSONArray getJSONArray(int jsonFile, String jsonArea) {
         try {
             InputStream inputStream = getResources().openRawResource(jsonFile); //R.raw.bd_districts
@@ -141,6 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //===============================================| Temporary Data
     private HashMap<String, ArrayList<JSONArray>> getGeometries() {
         HashSet<String> mHashSet = new HashSet<>();
         HashMap<String, ArrayList<JSONArray>> mHashMap = new LinkedHashMap<>();
@@ -172,6 +174,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 JSONArray jsonArray1 = coordinates.getJSONArray(0);
                 JSONArray jsonArray2 = jsonArray1.getJSONArray(0);
 
+                //-----------------------------------------------| All upzila’s coordinates are speared by division
                 mHashSet.add(division);
                 if (mHashSet.contains(division)) {
                     mArrayList.add(jsonArray2);
