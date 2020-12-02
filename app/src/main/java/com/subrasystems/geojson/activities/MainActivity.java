@@ -105,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    //===============================================| Temporary Data
+    //===============================================| divisions json
     private JSONArray getJSONArray(int jsonFile, String jsonArea) {
         try {
             InputStream inputStream = getResources().openRawResource(jsonFile); //R.raw.bd_districts
@@ -142,7 +142,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    //===============================================| Temporary Data
+    //===============================================| bangladesh json
     private HashMap<String, ArrayList<JSONArray>> getGeometries() {
         HashSet<String> mHashSet = new HashSet<>();
         HashMap<String, ArrayList<JSONArray>> mHashMap = new LinkedHashMap<>();
@@ -191,6 +191,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
+    //===============================================| Polyline || Polygon
     private void setPolygon(JSONArray jsonArray) {
         try {
             List<LatLng> arrayList = new ArrayList<>();
