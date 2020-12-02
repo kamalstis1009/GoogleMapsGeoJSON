@@ -38,6 +38,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private HashMap<String, Division> mDivisionMap = new LinkedHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +64,14 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                         @Override
                         public void onPositionItem(int position, String name) {
                             ((TextView) findViewById(R.id.items)).setText(name);
-                            /*Districts model = districtMap.get(name);
-                            if (model != null) {
-                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(model.getLat(), model.getLng()), 11F));
-                            }*/
                             ArrayList<JSONArray> jsonArrays = geometries.get(name);
                             for (JSONArray array : jsonArrays) {
                                 setPolygon(array);
+                            }
+
+                            Division model = mDivisionMap.get(name);
+                            if (model != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(Double.parseDouble(model.getLat()), Double.parseDouble(model.getLng())), 11F));
                             }
                         }
                     }, divisions, true);
@@ -132,6 +134,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             for (int i = 0; i < jsonArray.length(); i++){
                 Division model = new Gson().fromJson(jsonArray.getString(i), Division.class);
                 items.add(model.getName());
+                mDivisionMap.put(model.getName(), model);
             }
             return items;
         } catch (Exception e) {
