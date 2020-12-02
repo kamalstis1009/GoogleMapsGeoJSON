@@ -22,6 +22,7 @@ import com.subrasystems.geojson.R;
 import com.subrasystems.geojson.dialogs.SearchableSpinnerDialog;
 import com.subrasystems.geojson.models.Districts;
 import com.subrasystems.geojson.models.Division;
+import com.subrasystems.geojson.models.Upazila;
 import com.subrasystems.geojson.utils.Utility;
 
 import org.json.JSONArray;
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         JSONArray divisionJSONArray = getJSONArray(R.raw.bd_divisions, "divisions");
         JSONArray districtJSONArray = getJSONArray(R.raw.bd_districts, "districts");
+        JSONArray upazilaJSONArray = getJSONArray(R.raw.bd_upazilas, "upazilas");
 
 
         ArrayList<String> geometries = getGeometries();
@@ -124,16 +126,19 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private ArrayList<String> getAreaName(JSONArray jsonArray, boolean isDivision) {
+    private ArrayList<String> getAreaName(JSONArray jsonArray, int place) {
         //HashMap<String, Districts> mMap = new LinkedHashMap<>();
         try {
             ArrayList<String> items = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++){
-                if (isDivision) {
+                if (place == 1) {
                     Division model = new Gson().fromJson(jsonArray.getString(i), Division.class);
                     items.add(model.getName());
-                } else {
+                } else if(place == 2) {
                     Districts model = new Gson().fromJson(jsonArray.getString(i), Districts.class);
+                    items.add(model.getName());
+                } else if(place == 3) {
+                    Upazila model = new Gson().fromJson(jsonArray.getString(i), Upazila.class);
                     items.add(model.getName());
                 }
                 //mMap.put(model.getName(), model);
