@@ -48,11 +48,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         JSONArray divisionJSONArray = getJSONArray(R.raw.bd_divisions, "divisions");
         ArrayList<String> divisions = getAreaName(divisionJSONArray);
-
         HashMap<String, ArrayList<JSONArray>> geometries = getGeometries();
 
+        //-----------------------------------------------| Google Maps
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
 
-
+        //-----------------------------------------------| Spinner
         if (divisions != null) {
             ((TextView) findViewById(R.id.items)).setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -74,10 +76,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             });
         }
-
-        //-----------------------------------------------| Google Maps
-        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
-        mapFragment.getMapAsync(this);
     }
 
     @Override
