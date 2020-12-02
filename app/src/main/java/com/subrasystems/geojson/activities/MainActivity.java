@@ -68,8 +68,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mProgress = Utility.getInstance().showProgressDialog(MainActivity.this, "Please wait…", true);
                             ((TextView) findViewById(R.id.items)).setText(name);
                             ArrayList<JSONArray> jsonArrays = geometries.get(name);
-                            for (JSONArray array : jsonArrays) {
-                                setPolygon(array);
+                            if (jsonArrays != null) {
+                                for (JSONArray array : jsonArrays) {
+                                    setPolygon(array);
+                                }
                             }
 
                             Division model = mDivisionMap.get(name);
