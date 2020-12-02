@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private ProgressDialog mProgress;
     private GoogleMap mMap;
+    private ArrayList<Polygon> mPolygons;
     private HashMap<String, Division> mDivisionMap = new LinkedHashMap<>();
 
     @Override
@@ -69,6 +71,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             ((TextView) findViewById(R.id.items)).setText(name);
                             ArrayList<JSONArray> jsonArrays = geometries.get(name);
                             if (jsonArrays != null) {
+                                if (mPolygons != null) {
+                                    for (Polygon polygon : mPolygons) {
+                                        polygon.remove();
+                                    }
+                                }
                                 for (JSONArray array : jsonArrays) {
                                     setPolygon(array);
                                 }
@@ -249,7 +256,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 options.add(latLng);
             }
             mMap.addPolygon(options).setTag("polygon");
-            mMap.addPolygon(options);
+            Polygon polygon = mMap.addPolygon(options);
+            mPolygons.add(polygon);
         } catch (Exception e) {
             e.printStackTrace();
         }

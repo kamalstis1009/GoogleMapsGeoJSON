@@ -2,14 +2,14 @@
   "divisions": [
     {
       "id": "1",
-      "name": "Barishal",
+      "name": "Barisal",
       "bn_name": "বরিশাল",
       "lat": "22.701002",
       "lng": "90.353451"
     },
     {
       "id": "2",
-      "name": "Chattogram",
+      "name": "Chittagong",
       "bn_name": "চট্টগ্রাম",
       "lat": "22.356851",
       "lng": "91.783182"
