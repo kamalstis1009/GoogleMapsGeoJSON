@@ -153,7 +153,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private HashMap<String, ArrayList<JSONArray>> getGeometries() {
         HashSet<String> mHashSet = new HashSet<>();
         HashMap<String, ArrayList<JSONArray>> mHashMap = new LinkedHashMap<>();
-        ArrayList<JSONArray> mArrayList = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList1 = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList2 = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList3 = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList4 = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList5 = new ArrayList<>();
+        ArrayList<JSONArray> mArrayList6 = new ArrayList<>();
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.bangladesh);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -182,13 +187,38 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 JSONArray jsonArray2 = jsonArray1.getJSONArray(0);
 
                 //-----------------------------------------------| All upzila’s coordinates are speared by division
-                mHashSet.add(division);
+                /*mHashSet.add(division);
                 if (mHashSet.contains(division)) {
                     mArrayList.add(jsonArray2);
                 } else {
                     mHashMap.put(upazila, mArrayList);
                     mArrayList.clear();
+                }*/
+
+                if (division.equals("Barisal")) {
+                    mArrayList1.add(jsonArray2);
                 }
+                if (division.equals("Rajshahi")) {
+                    mArrayList2.add(jsonArray2);
+                }
+                if (division.equals("Chittagong")) {
+                    mArrayList3.add(jsonArray2);
+                }
+                if (division.equals("Khulna")) {
+                    mArrayList4.add(jsonArray2);
+                }
+                if (division.equals("Dhaka")) {
+                    mArrayList5.add(jsonArray2);
+                }
+                if (division.equals("Sylhet")) {
+                    mArrayList6.add(jsonArray2);
+                }
+                mHashMap.put("Barisal", mArrayList1);
+                mHashMap.put("Rajshahi", mArrayList2);
+                mHashMap.put("Chittagong", mArrayList3);
+                mHashMap.put("Khulna", mArrayList4);
+                mHashMap.put("Dhaka", mArrayList5);
+                mHashMap.put("Sylhet", mArrayList6);
 
             }
             return mHashMap;
