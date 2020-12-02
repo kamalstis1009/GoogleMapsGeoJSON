@@ -20,9 +20,7 @@ import com.google.maps.android.data.geojson.GeoJsonLayer;
 import com.google.maps.android.data.geojson.GeoJsonPolygonStyle;
 import com.subrasystems.geojson.R;
 import com.subrasystems.geojson.dialogs.SearchableSpinnerDialog;
-import com.subrasystems.geojson.models.Districts;
 import com.subrasystems.geojson.models.Division;
-import com.subrasystems.geojson.models.Upazila;
 import com.subrasystems.geojson.utils.Utility;
 
 import org.json.JSONArray;
@@ -33,14 +31,13 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-
-    private HashMap<String, JSONArray> mHashMap = new LinkedHashMap<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,12 +47,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         //ArrayList<Districts> arrayList = new Gson().fromJson(getJson(R.raw.bd_districts), new TypeToken<ArrayList<Districts>>(){}.getType());
 
         JSONArray divisionJSONArray = getJSONArray(R.raw.bd_divisions, "divisions");
-        JSONArray districtJSONArray = getJSONArray(R.raw.bd_districts, "districts");
-        JSONArray upazilaJSONArray = getJSONArray(R.raw.bd_upazilas, "upazilas");
+        ArrayList<String> divisions = getAreaName(divisionJSONArray);
+
+        HashMap<String, ArrayList<JSONArray>> geometries = getGeometries();
 
 
-        ArrayList<String> geometries = getGeometries();
-        if (geometries != null) {
+
+        if (divisions != null) {
             ((TextView) findViewById(R.id.items)).setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -67,9 +65,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             if (model != null) {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(model.getLat(), model.getLng()), 11F));
                             }*/
-                            setPolygon(mHashMap.get(name));
+                            ArrayList<JSONArray> jsonArrays = geometries.get(name);
+                            for (JSONArray array : jsonArrays) {
+                                setPolygon(array);
+                            }
                         }
-                    }, geometries, true);
+                    }, divisions, true);
                 }
             });
         }
@@ -126,22 +127,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private ArrayList<String> getAreaName(JSONArray jsonArray, int place) {
-        //HashMap<String, Districts> mMap = new LinkedHashMap<>();
+    private ArrayList<String> getAreaName(JSONArray jsonArray) {
         try {
             ArrayList<String> items = new ArrayList<>();
             for (int i = 0; i < jsonArray.length(); i++){
-                if (place == 1) {
-                    Division model = new Gson().fromJson(jsonArray.getString(i), Division.class);
-                    items.add(model.getName());
-                } else if(place == 2) {
-                    Districts model = new Gson().fromJson(jsonArray.getString(i), Districts.class);
-                    items.add(model.getName());
-                } else if(place == 3) {
-                    Upazila model = new Gson().fromJson(jsonArray.getString(i), Upazila.class);
-                    items.add(model.getName());
-                }
-                //mMap.put(model.getName(), model);
+                Division model = new Gson().fromJson(jsonArray.getString(i), Division.class);
+                items.add(model.getName());
             }
             return items;
         } catch (Exception e) {
@@ -150,8 +141,10 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         }
     }
 
-    private ArrayList<String> getGeometries() {
-        ArrayList<String> names = new ArrayList<>();
+    private HashMap<String, ArrayList<JSONArray>> getGeometries() {
+        HashSet<String> mHashSet = new HashSet<>();
+        HashMap<String, ArrayList<JSONArray>> mHashMap = new LinkedHashMap<>();
+        ArrayList<JSONArray> mArrayList = new ArrayList<>();
         try {
             InputStream inputStream = getResources().openRawResource(R.raw.bangladesh);
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
@@ -179,11 +172,16 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 JSONArray jsonArray1 = coordinates.getJSONArray(0);
                 JSONArray jsonArray2 = jsonArray1.getJSONArray(0);
 
-                names.add(upazila);
-                mHashMap.put(upazila, jsonArray2);
-            }
+                mHashSet.add(division);
+                if (mHashSet.contains(division)) {
+                    mArrayList.add(jsonArray2);
+                } else {
+                    mHashMap.put(upazila, mArrayList);
+                    mArrayList.clear();
+                }
 
-            return names;
+            }
+            return mHashMap;
         } catch (Exception e) {
             e.printStackTrace();
             return null;
