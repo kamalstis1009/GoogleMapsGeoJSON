@@ -71,11 +71,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             ((TextView) findViewById(R.id.items)).setText(name);
                             ArrayList<JSONArray> jsonArrays = geometries.get(name);
                             if (jsonArrays != null) {
-                                if (mPolygons != null) {
+                                /*if (mPolygons != null) {
                                     for (Polygon polygon : mPolygons) {
                                         polygon.remove();
                                     }
-                                }
+                                }*/
                                 for (JSONArray array : jsonArrays) {
                                     setPolygon(array);
                                 }
